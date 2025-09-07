@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Proxy Extension",
+  "version": "1.0",
+  "description": "A simple proxy extension.",
+  "permissions": [
+    "proxy",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
