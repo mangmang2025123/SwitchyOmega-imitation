@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proxy Profile Management</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; min-width: 600px; }
+    h1, h2 { font-weight: 400; }
+    ul { list-style: none; padding: 0; }
+    button { cursor: pointer; }
+    hr { margin: 30px 0; }
+    .section-container { border: 1px solid #ccc; border-radius: 4px; padding: 20px; margin-top: 20px; }
+    .item-list-item { padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .item-details { flex-grow: 1; }
+    .item-name { font-weight: bold; }
+    .item-config { font-family: monospace; color: #555; }
+    .item-actions button { margin-left: 10px; }
+    .form-row { margin-bottom: 10px; }
+    .form-row label { display: inline-block; width: 120px; }
+    .form-actions { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <h1>Proxy Settings</h1>
+
+  <div id="profiles-section">
+    <h2>Profiles</h2>
+    <ul id="profiles-list"></ul>
+    <button id="add-new-profile-btn">Add New Profile</button>
+    <div id="edit-profile-form-container" class="section-container" style="display:none;">
+      <h3 id="profile-form-title">Add New Profile</h3>
+      <form id="profile-form">
+        <input type="hidden" id="profile-id">
+        <div class="form-row"><label for="profile-name">Name:</label><input type="text" id="profile-name" required></div>
+        <div class="form-row"><label for="profile-scheme">Scheme:</label><select id="profile-scheme"><option value="http">HTTP</option><option value="socks4">SOCKS4</option><option value="socks5">SOCKS5</option></select></div>
+        <div class="form-row"><label for="profile-host">Host:</label><input type="text" id="profile-host" required></div>
+        <div class="form-row"><label for="profile-port">Port:</label><input type="number" id="profile-port" required></div>
+        <div class="form-actions"><button type="submit">Save Profile</button><button type="button" id="cancel-edit-profile-btn">Cancel</button></div>
+      </form>
+    </div>
+  </div>
+
+  <hr>
+
+  <div id="auto-switch-section">
+    <h2>Auto-Switch Settings</h2>
+    <div class="form-row">
+      <label for="auto-switch-default">Default Profile:</label>
+      <select id="auto-switch-default">
+        <option value="null">Use Direct Connection</option>
+        <!-- Profiles will be dynamically added here -->
+      </select>
+    </div>
+    <h3>Rules</h3>
+    <ul id="rules-list"></ul>
+    <button id="add-new-rule-btn">Add New Rule</button>
+    <div id="edit-rule-form-container" class="section-container" style="display:none;">
+      <h3 id="rule-form-title">Add New Rule</h3>
+      <form id="rule-form">
+        <input type="hidden" id="rule-id">
+        <div class="form-row"><label for="rule-pattern">URL Pattern:</label><input type="text" id="rule-pattern" placeholder="*example.com*" required></div>
+        <div class="form-row"><label for="rule-profile">Profile:</label><select id="rule-profile" required></select></div>
+        <div class="form-actions"><button type="submit">Save Rule</button><button type="button" id="cancel-edit-rule-btn">Cancel</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

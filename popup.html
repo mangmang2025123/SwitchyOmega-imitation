@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proxy Settings</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 300px;
+      padding: 10px;
+    }
+    h3 {
+      margin-top: 0;
+      font-weight: 400;
+    }
+    #mode-selection {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    #manage-profiles-btn {
+      color: #007bff;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h3>Proxy Settings</h3>
+
+  <select id="mode-selection">
+    <!-- Options will be dynamically inserted here -->
+  </select>
+
+  <div class="actions">
+    <button id="apply-btn">Apply</button>
+    <button id="manage-profiles-btn">Manage Profiles</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
