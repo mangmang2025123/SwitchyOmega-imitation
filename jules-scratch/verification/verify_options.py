@@ -33,16 +33,16 @@ def main():
             return
 
         extension_id = service_worker.url.split('/')[2]
-        popup_url = f'chrome-extension://{extension_id}/popup.html'
+        options_url = f'chrome-extension://{extension_id}/options.html'
 
         page = context.new_page()
         try:
-            page.goto(popup_url, wait_until='domcontentloaded')
-            page.wait_for_selector('#mode-selection')
-            page.screenshot(path='jules-scratch/verification/popup.png')
-            print("Popup screenshot taken successfully.")
+            page.goto(options_url, wait_until='domcontentloaded')
+            page.wait_for_selector('#profiles-list')
+            page.screenshot(path='jules-scratch/verification/options.png')
+            print("Options page screenshot taken successfully.")
         except Exception as e:
-            print(f"An error occurred while taking popup screenshot: {e}")
+            print(f"An error occurred while taking options screenshot: {e}")
         finally:
             context.close()
 

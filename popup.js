@@ -1,66 +1,77 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const directRadio = document.getElementById('direct');
-  const systemRadio = document.getElementById('system');
-  const fixedRadio = document.getElementById('fixed');
-  const fixedServerSettings = document.getElementById('fixed-server-settings');
-  const schemeInput = document.getElementById('scheme');
-  const serverInput = document.getElementById('server');
-  const portInput = document.getElementById('port');
-  const saveButton = document.getElementById('save-button');
+document.addEventListener('DOMContentLoaded', function() {
+  const modeSelection = document.getElementById('mode-selection');
+  const applyBtn = document.getElementById('apply-btn');
+  const manageProfilesBtn = document.getElementById('manage-profiles-btn');
 
-  // Show/hide fixed server settings based on selected mode
-  function updateFixedServerSettingsVisibility() {
-    if (fixedRadio.checked) {
-      fixedServerSettings.style.display = 'block';
-    } else {
-      fixedServerSettings.style.display = 'none';
-    }
+  /**
+   * Fetches profiles and activeMode from storage and populates the dropdown.
+   */
+  function loadAndRenderModes() {
+    chrome.storage.local.get(['profiles', 'activeMode'], function(data) {
+      const profiles = data.profiles || [];
+      const activeMode = data.activeMode || 'direct';
+
+      // Clear previous options
+      modeSelection.innerHTML = '';
+
+      // Add Direct and System options
+      const directOption = new Option('Direct Connection', 'direct');
+      const systemOption = new Option('System Proxy', 'system');
+      modeSelection.add(directOption);
+      modeSelection.add(systemOption);
+
+      // Add a separator
+      if (profiles.length > 0) {
+        const separator = new Option('--- Profiles ---', '');
+        separator.disabled = true;
+        modeSelection.add(separator);
+      }
+
+      // Add options for each profile
+      profiles.forEach(profile => {
+        const profileOption = new Option(profile.name, profile.id);
+        modeSelection.add(profileOption);
+      });
+
+      // Set the selected option
+      modeSelection.value = activeMode;
+    });
   }
 
-  directRadio.addEventListener('change', updateFixedServerSettingsVisibility);
-  systemRadio.addEventListener('change', updateFixedServerSettingsVisibility);
-  fixedRadio.addEventListener('change', updateFixedServerSettingsVisibility);
+  /**
+   * Saves the selected mode to storage and tells the background script to apply it.
+   */
+  function handleApply() {
+    let selectedValue = modeSelection.value;
 
-  // Load saved settings and update UI
-  chrome.storage.local.get(['proxyMode', 'proxyScheme', 'proxyServer', 'proxyPort'], function (result) {
-    if (result.proxyMode) {
-      document.querySelector(`input[name="mode"][value="${result.proxyMode}"]`).checked = true;
+    // The value from the <select> is a string, but profile IDs are numbers.
+    // Convert to number if it's a numeric string.
+    if (!isNaN(selectedValue) && selectedValue !== '') {
+      selectedValue = Number(selectedValue);
     }
-    if (result.proxyScheme) {
-      schemeInput.value = result.proxyScheme;
-    }
-    if (result.proxyServer) {
-      serverInput.value = result.proxyServer;
-    }
-    if (result.proxyPort) {
-      portInput.value = result.proxyPort;
-    }
-    updateFixedServerSettingsVisibility();
-  });
 
-  // Save settings and notify background script
-  saveButton.addEventListener('click', function () {
-    const mode = document.querySelector('input[name="mode"]:checked').value;
-    const scheme = schemeInput.value;
-    const server = serverInput.value;
-    const port = parseInt(portInput.value, 10);
-
-    const settings = {
-      proxyMode: mode,
-      proxyScheme: scheme,
-      proxyServer: server,
-      proxyPort: port
-    };
-
-    chrome.storage.local.set(settings, function () {
+    chrome.storage.local.set({ activeMode: selectedValue }, function() {
       chrome.runtime.sendMessage({ action: 'applyProxySettings' }, function(response) {
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError.message);
         } else {
           console.log(response.status);
         }
+        // Close the popup after applying changes.
         window.close();
       });
     });
-  });
+  }
+
+  /**
+   * Opens the options page in a new tab.
+   */
+  function openOptionsPage() {
+    chrome.runtime.openOptionsPage();
+  }
+
+  // --- Initialization ---
+  loadAndRenderModes();
+  applyBtn.addEventListener('click', handleApply);
+  manageProfilesBtn.addEventListener('click', openOptionsPage);
 });

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proxy Profile Management</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      min-width: 600px;
+    }
+    h1, h2 {
+      font-weight: 400;
+    }
+    #profiles-list {
+      list-style: none;
+      padding: 0;
+    }
+    .profile-item {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .profile-details {
+      flex-grow: 1;
+    }
+    .profile-name {
+      font-weight: bold;
+    }
+    .profile-config {
+      font-family: monospace;
+      color: #555;
+    }
+    .profile-actions button {
+      margin-left: 10px;
+    }
+    #edit-form-container {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .form-row {
+      margin-bottom: 10px;
+    }
+    .form-row label {
+      display: inline-block;
+      width: 80px;
+    }
+    .form-actions {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Proxy Profile Management</h1>
+
+  <h2>Profiles</h2>
+  <ul id="profiles-list">
+    <!-- Profiles will be dynamically inserted here -->
+  </ul>
+  <button id="add-new-profile-btn">Add New Profile</button>
+
+  <div id="edit-form-container" style="display:none;">
+    <h2 id="form-title">Add New Profile</h2>
+    <form id="profile-form">
+      <input type="hidden" id="profile-id">
+      <div class="form-row">
+        <label for="profile-name">Name:</label>
+        <input type="text" id="profile-name" required>
+      </div>
+      <div class="form-row">
+        <label for="profile-scheme">Scheme:</label>
+        <select id="profile-scheme">
+          <option value="http">HTTP</option>
+          <option value="socks4">SOCKS4</option>
+          <option value="socks5">SOCKS5</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="profile-host">Host:</label>
+        <input type="text" id="profile-host" required>
+      </div>
+      <div class="form-row">
+        <label for="profile-port">Port:</label>
+        <input type="number" id="profile-port" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" id="save-profile-btn">Save</button>
+        <button type="button" id="cancel-edit-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
